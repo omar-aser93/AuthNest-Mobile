@@ -1,0 +1,22 @@
+{
+  "profile": {
+    "title": "الملف الشخصي",
+    "posts": "المنشورات",
+    "saved": "المحفوظات",
+    "friends": "الأصدقاء",
+    "myPosts": "منشوراتي",
+    "savedPosts": "المنشورات المحفوظة",
+    "friendsManager": "إدارة الأصدقاء",
+    "myReports": "بلاغاتي",
+    "appearance": "المظهر",
+    "themeLight": "فاتح",
+    "themeDark": "داكن",
+    "themeSystem": "النظام",
+    "language": "اللغة",
+    "english": "English",
+    "arabic": "العربية",
+    "changePassword": "تغيير كلمة المرور",
+    "deleteAccount": "حذف الحساب",
+    "signOut": "تسجيل الخروج"
+  }
+}

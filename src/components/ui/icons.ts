@@ -63,6 +63,7 @@ const ICONS = {
   MicOff: Lucide.MicOff,
   VideoOff: Lucide.VideoOff,
   SwitchCamera: Lucide.SwitchCamera,
+  Languages: Lucide.Languages,
   // ... add more as you use them
 } as const;
 
@@ -81,4 +82,4 @@ export const { Bell, ArrowLeft, Info, Send, Paperclip, ImageIcon, Sparkles, X, C
   Play, Phone, Video, PhoneOff, Mic, Square, Ellipsis, Bookmark, History, MessageCircle, Share2, ImagePlus,
   UserPlus, UserCheck, UserMinus, Clock, MoreVertical, Ban, Shield, ShieldOff, FileText, Users, Moon, Settings2,  
   Lock, Trash2, Flag, Edit3, Search, Home, Plus, User, ThumbsUp, ChevronRight, TrendingUp, Hash, LogOut, Pencil,
-  Eye, EyeOff, Camera, Sun, Monitor, MessageSquareWarning, Pause, MicOff, VideoOff, SwitchCamera } = ICONS;
+  Eye, EyeOff, Camera, Sun, Monitor, MessageSquareWarning, Pause, MicOff, VideoOff, SwitchCamera, Languages } = ICONS;
