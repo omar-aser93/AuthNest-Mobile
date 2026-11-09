@@ -1,25 +1,28 @@
 {
   "expo": {
-    "name": "mobile",
+    "name": "AuthNest",
     "slug": "mobile",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "mobile",
+    "scheme": "authnest",
     "userInterfaceStyle": "automatic",
     "ios": {
+      "bundleIdentifier": "com.authnest.app",
       "icon": "./assets/expo.icon"
     },
     "android": {
+      "package": "com.authnest.app",
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/images/android-icon-foreground.png",
+        "backgroundColor": "#b8e2f4",
+        "foregroundImage": "./assets/images/icon.png",
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false
     },
     "web": {
+      "bundler": "metro",
       "output": "static",
       "favicon": "./assets/images/favicon.png"
     },
@@ -29,14 +32,42 @@
         "expo-splash-screen",
         {
           "backgroundColor": "#208AEF",
-          "image": "./assets/images/splash-icon.png",
+          "image": "./assets/images/icon.png",
           "imageWidth": 76
         }
-      ]
+      ],
+      "expo-secure-store",
+      [
+        "@react-native-google-signin/google-signin",
+        {
+          "iosUrlScheme": "com.googleusercontent.apps.830011831574-ms7vf31ipc1tpiticdrnb4kkn7oqqi8p"
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "AuthNest needs access to your photos to update your profile picture."
+        }
+      ],
+      "@livekit/react-native-expo-plugin",
+      "@config-plugins/react-native-webrtc",
+      [
+        "expo-audio",
+        {
+          "microphonePermission": "Allow AuthNest to access your microphone to record voice messages."
+        }
+      ],
+      "expo-video"
     ],
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "871266ac-d46f-48f6-bd59-6652e0380efc"
+      }
     }
   }
 }
