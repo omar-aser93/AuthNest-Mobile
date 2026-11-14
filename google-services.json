@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "846529349266",
+    "project_id": "auth-nest-322db",
+    "storage_bucket": "auth-nest-322db.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:846529349266:android:b7da2812f58183b2d5884b",
+        "android_client_info": {
+          "package_name": "com.authnest.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBiVVbb-HFcAbnu2H5guW24trhy_F8WreQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
