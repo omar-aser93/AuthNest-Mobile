@@ -13,6 +13,7 @@
     },
     "android": {
       "package": "com.authnest.app",
+      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "backgroundColor": "#b8e2f4",
         "foregroundImage": "./assets/images/icon.png",
@@ -58,7 +59,14 @@
           "microphonePermission": "Allow AuthNest to access your microphone to record voice messages."
         }
       ],
-      "expo-video"
+      "expo-video",
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/images/notification-icon.png",
+          "color": "#208AEF"
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,

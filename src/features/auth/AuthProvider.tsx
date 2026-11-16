@@ -6,6 +6,7 @@ import { googleSignOut } from './google';
 import { login as loginApi, register as registerApi,logout as logoutApi, getMe, loginWithGoogle as loginWithGoogleApi, loginWithGitHub as loginWithGitHubApi, type SocialLoginResult } from './api';
 import type { User } from './types';
 import type { LoginType, RegisterType } from './schemas';
+import { syncPushToken, unregisterPushToken } from '@/lib/notifications';
 
 // ─── Context ────────────────────────────────────────────────────────────────
 type AuthValue = {
@@ -74,6 +75,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     })();
   }, []);
 
+
+  // Push-notifications token effect — fires whenever user.id changes (login, cold start, account switch)
+  useEffect(() => {
+    if (user?.id) syncPushToken();
+  }, [user?.id]);
+
+  
   // ─── Actions ─────────────────────────────────────────────────────────────
   const signIn = useCallback(async (credentials: LoginType) => {
     const me = await loginApi(credentials);
@@ -90,8 +98,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const signOut = useCallback(async () => {
-    await logoutApi();         // server best-effort + clearTokens
-    await googleSignOut();     // native Google session cleanup (no-op in Expo Go)
+    await unregisterPushToken().catch(() => {});    // unregister push token, it uses cached token
+    await logoutApi();                              // server best-effort + clearTokens
+    await googleSignOut();                          // native Google session cleanup (no-op in Expo Go)
     setUser(null);
     queryClient.clear();
   }, []);

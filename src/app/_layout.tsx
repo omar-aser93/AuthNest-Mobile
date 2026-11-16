@@ -11,6 +11,7 @@ import { queryClient } from "@/lib/queryClient";
 import '@/lib/reactQuerySetup';
 import { SocketProvider } from '@/lib/socket/SocketProvider';
 import { UnreadCountProvider } from '@/lib/socket/UnreadCountContext';
+import { useNotificationNavigation } from '@/lib/useNotificationNavigation';
 import { PortalHost } from "@rn-primitives/portal";             // used by react-native-reusables
 import { useColorScheme } from 'nativewind';
 import { NAV_THEME, THEME_STORAGE_KEY } from '@/lib/theme';
@@ -30,8 +31,9 @@ registerGlobals();        // runs before any LiveKit code
 
 
 function RootNavigator() {
-  const { user, isLoading } = useAuth();     // get auth & loading state from context 
-  useNotificationSocket();                   // wire the notification socket
+  const { user, isLoading } = useAuth();             // get auth & loading state from context 
+  useNotificationSocket();                           // wire the notification socket
+  useNotificationNavigation(!isLoading && !!user);   // handle push notifications
 
   // Once auth state is known, hide the native splash.
   useEffect(() => {

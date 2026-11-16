@@ -6,6 +6,7 @@ import { Text } from '@/components/ui/text';
 import { useAuth } from '@/features/auth/AuthProvider';
 import { conversationQueryOptions } from '../api';
 import { useChat } from '../hooks/useChat';
+import { useViewingConversation } from '../hooks/useViewingConversation';
 import { ChatHeader } from '../components/ChatHeader';
 import { MessageList } from '../components/MessageList';
 import { TypingIndicator } from '../components/TypingIndicator';
@@ -13,6 +14,7 @@ import { MessageInput } from '../components/MessageInput';
 
 export function ChatScreen() {
   const { conversationId } = useLocalSearchParams<{ conversationId: string }>();
+  useViewingConversation(conversationId ?? null);
   const { user } = useAuth();
   const convQ = useQuery(conversationQueryOptions(conversationId));
   const chat = useChat(conversationId);
