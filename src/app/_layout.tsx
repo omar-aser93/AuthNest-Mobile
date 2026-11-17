@@ -12,6 +12,7 @@ import '@/lib/reactQuerySetup';
 import { SocketProvider } from '@/lib/socket/SocketProvider';
 import { UnreadCountProvider } from '@/lib/socket/UnreadCountContext';
 import { useNotificationNavigation } from '@/lib/useNotificationNavigation';
+import { useVoipTokenSync } from '@/features/chat/hooks/useVoipTokenSync';
 import { PortalHost } from "@rn-primitives/portal";             // used by react-native-reusables
 import { useColorScheme } from 'nativewind';
 import { NAV_THEME, THEME_STORAGE_KEY } from '@/lib/theme';
@@ -20,6 +21,7 @@ import { View } from "react-native";
 import { useNotificationSocket } from "@/lib/socket/useNotificationSocket";
 import { registerGlobals } from '@livekit/react-native';
 import { IncomingCallModal } from "@/features/chat/components/IncomingCallModal";
+import { NativeCallHost } from '@/features/chat/components/NativeCallHost';
 
 // Keep the native splash visible until the auth state is known.
 SplashScreen.preventAutoHideAsync();
@@ -34,6 +36,7 @@ function RootNavigator() {
   const { user, isLoading } = useAuth();             // get auth & loading state from context 
   useNotificationSocket();                           // wire the notification socket
   useNotificationNavigation(!isLoading && !!user);   // handle push notifications
+  useVoipTokenSync(user?.id);                        // sync voip token
 
   // Once auth state is known, hide the native splash.
   useEffect(() => {
@@ -90,7 +93,8 @@ export default function RootLayout() {
               <View style={{ flex: 1 }}>
                 <OfflineBanner />
                 <RootNavigator /> 
-                <IncomingCallModal />
+                {/* <IncomingCallModal /> */}
+                <NativeCallHost />
                 <PortalHost />
               </View>
             </ThemeProvider>

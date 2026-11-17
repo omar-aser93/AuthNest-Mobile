@@ -7,6 +7,7 @@ import { login as loginApi, register as registerApi,logout as logoutApi, getMe, 
 import type { User } from './types';
 import type { LoginType, RegisterType } from './schemas';
 import { syncPushToken, unregisterPushToken } from '@/lib/notifications';
+import { unregisterVoipToken } from '../chat/hooks/useVoipTokenSync';
 
 // ─── Context ────────────────────────────────────────────────────────────────
 type AuthValue = {
@@ -99,6 +100,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signOut = useCallback(async () => {
     await unregisterPushToken().catch(() => {});    // unregister push token, it uses cached token
+    await unregisterVoipToken().catch(() => {});    // unregister voip token
     await logoutApi();                              // server best-effort + clearTokens
     await googleSignOut();                          // native Google session cleanup (no-op in Expo Go)
     setUser(null);

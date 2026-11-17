@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Modal, View, Pressable } from 'react-native';
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LiveKitRoom, VideoTrack, useTracks, useLocalParticipant, isTrackReference } from '@livekit/react-native';
 import { Track, type LocalVideoTrack } from 'livekit-client';
+import * as Calls from 'expo-callkit-telecom';
 import { Text } from '@/components/ui/text';
 import { Mic, MicOff, Video, VideoOff, PhoneOff, SwitchCamera } from '@/components/ui/icons';
 
@@ -11,9 +12,11 @@ type Props = {
   token: string;
   callType: 'audio' | 'video';
   onLeave: () => void;
+  onConnected?: () => void;      // ← native flow calls fulfillIncomingCallConnected here
+  sessionId?: string;            // ← native call session id (absent for outgoing in-app calls)
 };
 
-export function CallRoom({ serverUrl, token, callType, onLeave }: Props) {
+export function CallRoom({ serverUrl, token, callType, onLeave, onConnected, sessionId }: Props) {
   return (
     <Modal
       visible
@@ -30,11 +33,12 @@ export function CallRoom({ serverUrl, token, callType, onLeave }: Props) {
           token={token}
           connect
           video={callType === 'video'}
-          audio
+          audio          
+          onConnected={onConnected}
           onDisconnected={onLeave}
           options={{ adaptiveStream: { pixelDensity: 'screen' } }}
         >
-          <RoomView callType={callType} onLeave={onLeave} />
+          <RoomView callType={callType} onLeave={onLeave} sessionId={sessionId} />
         </LiveKitRoom>
       </SafeAreaProvider>
     </Modal>
@@ -56,7 +60,7 @@ function RoundBtn({ onPress, active = true, danger, children }: {
   );
 }
 
-function RoomView({ callType, onLeave }: { callType: 'audio' | 'video'; onLeave: () => void }) {
+function RoomView({ callType, onLeave, sessionId }: { callType: 'audio' | 'video'; onLeave: () => void; sessionId?: string }) {
   const insets = useSafeAreaInsets();
   const { localParticipant, isMicrophoneEnabled, isCameraEnabled } = useLocalParticipant();
   const tracks = useTracks([Track.Source.Camera]);
@@ -65,12 +69,24 @@ function RoomView({ callType, onLeave }: { callType: 'audio' | 'video'; onLeave:
   const remote = tracks.find((t) => !t.participant.isLocal);
   const local = tracks.find((t) => t.participant.isLocal);
 
+  // Native mute button (notification / system UI) → LiveKit
+  useEffect(() => {
+    if (!sessionId) return;
+    const sub = Calls.addSetMutedActionListener(({ isMuted }) => { localParticipant.setMicrophoneEnabled(!isMuted); });
+    return () => sub.remove();
+  }, [sessionId, localParticipant]);
+
   const flipCamera = async () => {
     const track = localParticipant.getTrackPublication(Track.Source.Camera)?.track as LocalVideoTrack | undefined;
     if (!track) return;
     const next = facing === 'user' ? 'environment' : 'user';
     await track.restartTrack({ facingMode: next });
     setFacing(next);
+  };
+
+  const toggleMic = () => {
+    if (sessionId) Calls.setMuted(sessionId, isMicrophoneEnabled).catch(() => {});   // listener above applies it
+    else localParticipant.setMicrophoneEnabled(!isMicrophoneEnabled);
   };
 
   return (
@@ -101,7 +117,7 @@ function RoomView({ callType, onLeave }: { callType: 'audio' | 'video'; onLeave:
         className="absolute left-0 right-0 flex-row items-center justify-center gap-5"
         style={{ bottom: insets.bottom + 24 }}
       >
-        <RoundBtn active={isMicrophoneEnabled} onPress={() => localParticipant.setMicrophoneEnabled(!isMicrophoneEnabled)}>
+        <RoundBtn active={isMicrophoneEnabled} onPress={toggleMic}>
           {isMicrophoneEnabled ? <Mic size={24} className="text-white" /> : <MicOff size={24} className="text-black" />}
         </RoundBtn>
 

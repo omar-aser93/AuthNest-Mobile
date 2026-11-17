@@ -66,6 +66,18 @@
           "icon": "./assets/images/notification-icon.png",
           "color": "#208AEF"
         }
+      ],
+      [
+        "expo-callkit-telecom",
+        {
+          "sounds": ["./assets/sounds/ringtone.mp3"],
+          "defaultRingtoneIos": "ringtone.mp3",
+          "defaultRingtoneAndroid": "ringtone.mp3",
+          "notificationIconAndroid": "./assets/images/notification-icon.png",
+          "incomingCallTimeout": 30,
+          "supportsVideo": true,
+          "microphonePermission": "AuthNest needs the microphone for calls."
+        }
       ]
     ],
     "experiments": {
