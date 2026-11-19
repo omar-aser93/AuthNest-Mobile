@@ -10,7 +10,9 @@ import { postCommentsQueryOptions, commentKeys } from '@/features/comments/api';
 import type { CommentsPage } from '@/features/comments/types';
 import { CommentCard } from '@/features/comments/components/CommentCard';
 import { CommentForm } from '@/features/comments/components/CommentForm';
+import { PostCardSkeleton } from '../components/PostCardSkeleton';
 import { useAuth } from '@/features/auth/AuthProvider';
+
 
 export function PostDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -42,10 +44,8 @@ export function PostDetailScreen() {
   // ─── Post loading / error ────────────────────────────────────────────────
   if (postQuery.isLoading) {
     return (
-      <Screen edges={['bottom']}>
-        <View className="flex-1 items-center justify-center">
-          <ActivityIndicator size="large" />
-        </View>
+      <Screen scrollable={false} edges={['bottom']}>
+        <View className="p-3"><PostCardSkeleton /></View>
       </Screen>
     );
   }

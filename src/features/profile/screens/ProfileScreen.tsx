@@ -3,7 +3,8 @@ import { useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'expo-router';
-import { FileText, Bookmark, Users, Moon, Lock, Trash2, Flag, Languages } from '@/components/ui/icons';
+import { FileText, Bookmark, Users, Moon, Lock, Trash2, Flag, Languages, Shield } from '@/components/ui/icons';
+import * as WebBrowser from 'expo-web-browser';
 import { Screen } from '@/components/layout/Screen';
 import { Button } from '@/components/ui/button';
 import { Text } from '@/components/ui/text';
@@ -90,6 +91,11 @@ export function ProfileScreen() {
               onPress={() => router.push('/change-password')}
             />
           )}
+          <MenuRow
+            icon={<Shield size={20} className="text-foreground" />} 
+            label={t('profile.privacyPolicy')}
+            onPress={() => WebBrowser.openBrowserAsync(`${process.env.EXPO_PUBLIC_FRONTEND_ORIGIN}/privacy`)}
+          />
           <MenuRow
             icon={<Trash2 size={20} className="text-destructive" />}
             label={t('profile.deleteAccount')}

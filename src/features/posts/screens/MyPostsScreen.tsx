@@ -1,4 +1,4 @@
-import { ActivityIndicator, View } from 'react-native';
+import { View } from 'react-native';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useRouter } from 'expo-router';
 import { Screen } from '@/components/layout/Screen';
@@ -13,18 +13,8 @@ export function MyPostsScreen() {
 
   const posts = data?.pages.flatMap((p) => p.posts) ?? [];
 
-  if (isLoading) {
-    return (
-      <Screen edges={['bottom']}>
-        <View className="flex-1 items-center justify-center">
-          <ActivityIndicator />
-        </View>
-      </Screen>
-    );
-  }
-
   // Custom empty state with a CTA — the default PostFeedList empty state doesn't have a button, and this is the one screen where it's needed.
-  if (posts.length === 0 && !isRefetching) {
+  if (!isLoading && posts.length === 0 && !isRefetching) {
     return (
       <Screen edges={['bottom']}>
         <View className="flex-1 items-center justify-center gap-4 p-6">
@@ -44,6 +34,7 @@ export function MyPostsScreen() {
     <Screen scrollable={false} edges={['bottom']}>
       <PostFeedList
         posts={posts}  
+        isLoading={isLoading}
         isFetchingNextPage={isFetchingNextPage}
         hasNextPage={!!hasNextPage}
         fetchNextPage={fetchNextPage}
